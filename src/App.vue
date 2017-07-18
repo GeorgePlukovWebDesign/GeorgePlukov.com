@@ -26,6 +26,10 @@
                       <line x1="3em" y1="10px" x2="83%" y2="10px" />
                     </svg>
 
+          <div class="" v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
+
+          </div>
+
           <svg v-show="current_active == 1" id="line-blog" class="line" height="10" width="100%">
                       <line x1="0px" y1="10px" x2="6.25em" y2="10px"  />
                       <line class="lighter" x1="6.25em" y1="10px" x2="6.75em" y2="0px" />
@@ -107,8 +111,19 @@
   </div>
 </div>
 </template>
-
+<!-- axios.get('/user', {
+    params: {
+      ID: 12345
+    }
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  }); -->
 <script>
+
 export default {
   name: 'app',
   data () {
@@ -199,6 +214,7 @@ line {
 }
 
 
+
 /* Enter and leave animations can use different */
 
 
@@ -211,6 +227,7 @@ line {
 .slide-fade-leave-active {
   transition: all 0.2s;
 }
+
 
 
 /* .slide-fade-leave-active for <2.1.8 */
@@ -288,5 +305,9 @@ line {
 
 .font-bold {
   font-weight: 600;
+}
+
+.gallery{
+
 }
 </style>

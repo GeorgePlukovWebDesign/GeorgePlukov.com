@@ -5,18 +5,18 @@
       <span class="lato-hairline">George </span><span class="lato-bold">Plukov</span>
     </div>
     <div class="menu raleway">
-      <a v-on:mouseover="mouseOver(0)" v-on:mouseleave="mouseLeave(0)" href="#">Gallery</a>
-      <a v-on:mouseover="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" href="#">Blog</a>
-      <a v-on:mouseover="mouseOver(2)" v-on:mouseleave="mouseLeaveButton(2)" href="#">
-                Github
-              </a>
-      <a v-on:mouseover="mouseOver(4)" v-on:mouseleave="mouseLeaveButton(4)" href="#">Instagram
-              </a>
+      <a v-on:mouseover="mouseOver(0)" v-on:mouseleave="mouseLeave(0)" href="gallery">Gallery</a>
+      <!-- <a v-on:mouseover="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" href="#">Blog</a> -->
+      <!-- <a v-on:mouseover="mouseOver(2)" v-on:mouseleave="mouseLeaveButton(2)" href="#">
+                Projects
+              </a> -->
 
 
     </div>
     <transition name="slide-fade">
+
       <div v-if="current_active != -1" class="preview">
+
         <div class="lineblock">
           <!-- Line that fits the gallery item -->
           <svg v-show="current_active == 0" id="line-gallery" class="line" height="10" width="100%">
@@ -25,8 +25,10 @@
                       <line class="lighter" x1="2.5em" y1="0px" x2="3em" y2="10px" />
                       <line x1="3em" y1="10px" x2="83%" y2="10px" />
                     </svg>
-
-          <div class="" v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
+          <!-- Gallery display box -->
+          <!--  v-show="current_active == 0" -->
+          <div class="" v-on:mouseleave="mouseLeave(0)">
+            <img class="preview-image" v-bind:src="image.url" v-for="image in gallery"></img>
 
           </div>
 
@@ -123,6 +125,21 @@
     console.log(error);
   }); -->
 <script>
+import Firebase from 'firebase'
+// Setup Firebase
+var config = {
+    apiKey: "AIzaSyDjJouOC4yv9B0_a-JZe7SS6-UxU3wVFiI",
+    authDomain: "georgeplukov.firebaseapp.com",
+    databaseURL: "https://georgeplukov.firebaseio.com",
+    projectId: "georgeplukov",
+    storageBucket: "georgeplukov.appspot.com",
+    messagingSenderId: "639555083052"
+  };
+//
+// var db = firebaseApp.database()
+let app = Firebase.initializeApp(config)
+let db = app.database()
+let galleryRef = db.ref('gallery')
 
 export default {
   name: 'app',
@@ -132,6 +149,9 @@ export default {
       continue: false,
       insta_data: null
     }
+  },
+  firebase: {
+    gallery: galleryRef.limitToLast(3)
   },
   methods: {
     mouseOver: function (num) {

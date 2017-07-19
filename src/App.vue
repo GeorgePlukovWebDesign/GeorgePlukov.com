@@ -6,7 +6,7 @@
     </div>
     <div class="menu raleway">
       <a v-on:mouseover="mouseOver(0)" v-on:mouseleave="mouseLeave(0)" href="gallery">Gallery</a>
-      <!-- <a v-on:mouseover="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" href="#">Blog</a> -->
+      <a v-on:mouseover="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" href="#">Projects</a>
       <!-- <a v-on:mouseover="mouseOver(2)" v-on:mouseleave="mouseLeaveButton(2)" href="#">
                 Projects
               </a> -->
@@ -26,10 +26,11 @@
                       <line x1="3em" y1="10px" x2="83%" y2="10px" />
                     </svg>
           <!-- Gallery display box -->
-          <!--  v-show="current_active == 0" -->
-          <div class="" v-on:mouseleave="mouseLeave(0)">
-            <img class="preview-image" v-bind:src="image.url" v-for="image in gallery"></img>
-
+          <!--   -->
+          <div class="" v-show="current_active == 0" v-on:mouseleave="mouseLeave(0)">
+            <template v-for="image in gallery">
+              <img class="preview-image" v-bind:src="image.url" v-bind:alt="image.title"  ></img>
+            </template>
           </div>
 
           <svg v-show="current_active == 1" id="line-blog" class="line" height="10" width="100%">

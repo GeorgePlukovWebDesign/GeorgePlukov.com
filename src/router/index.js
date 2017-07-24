@@ -11,7 +11,7 @@ export default new Router({
       path:'/positions',
       name: 'positions',
       component: function (resolve) {
-        require(['@/components/Positions.vue'], resolve)
+        require(['@/components/Positions.vue',], resolve)
       }
     },
     {
@@ -19,6 +19,9 @@ export default new Router({
       name: 'gallery',
       component: function (resolve) {
         require(['@/components/Gallery.vue'], resolve)
+        // require(['@components/subpage/InProgress.vue'], resolve)
+
+
       }
     },
     {

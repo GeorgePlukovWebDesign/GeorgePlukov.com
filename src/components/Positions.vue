@@ -95,22 +95,7 @@ body{
 h1{
   font-size: 2.5em;
 }
-.lato-hairline {
-  font-family: 'Lato', sans-serif;
-  font-weight: 100;
-}
 
-.lato-norm {
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-}
-.lato-bold{
-  font-family: 'Lato', sans-serif;
-  font-weight: 600;
-}
-.raleway-medium{
-  font-family: 'Raleway', sans-serif;
-}
 
 
 .location{

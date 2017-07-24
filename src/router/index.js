@@ -4,13 +4,21 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
+    mode: 'history',
 
+  routes: [
     {
-      path:'/positions/',
+      path:'/positions',
       name: 'positions',
       component: function (resolve) {
         require(['@/components/Positions.vue'], resolve)
+      }
+    },
+    {
+      path:'/gallery',
+      name: 'gallery',
+      component: function (resolve) {
+        require(['@/components/Gallery.vue'], resolve)
       }
     },
     {

@@ -4,55 +4,75 @@
       <span class="lato-hairline">Work</span> <span class="lato-norm">Experience</span>
     </h1>
     <div class="flex-cont">
-      <!-- <div v-for="pos in positions" class="position">
-        <span class="position-employer lato-bold">
-          {{pos.employer}}
-        </span>
-          |
-        <span class="position-title">
-          {{pos.title}}
-        </span>
+      <div v-for="pos in this.positions" class="position">
+        <!-- row 1 -->
+        <div class="row">
 
-        <div class="">
+          <span class="position-employer lato-bold">
+            {{ pos.employer | uppercase }}
+
+          </span>
+|
+          <span class="position-title lato-norm">
+            {{pos.title}}
+          </span>
 
         </div>
-      </div> -->
+        <!-- row 2 -->
+        <div class="row ">
+          <span class="date raleway-medium">
+            {{ pos.year }} | {{ pos.location }}
+          </span>
+
+        </div>
+        <!-- row 3 -->
+        <div class="row ">
+          <span class="date raleway-medium">
+            {{ pos.description }}
+          </span>
+
+        </div>
+      </div>
     </div>
   </div>
 
 </template>
 
 <script>
-// import Firebase from 'firebase'
-// Setup Firebase
-// var config = {
-//   apiKey: "AIzaSyDjJouOC4yv9B0_a-JZe7SS6-UxU3wVFiI",
-//   authDomain: "georgeplukov.firebaseapp.com",
-//   databaseURL: "https://georgeplukov.firebaseio.com",
-//   projectId: "georgeplukov",
-//   storageBucket: "georgeplukov.appspot.com",
-//   messagingSenderId: "639555083052"
-// };
-// //
-// // var db = firebaseApp.database()
-// let positionsRef;
-// try {
-//   let app = Firebase.initializeApp(config)
-//   let db = app.database()
-//   positionsRef = db.ref('positions')
-// } catch (err) {
-//   // we skip the "already exists" message which is
-//   // not an actual error when we're hot-reloading
-//   if (!/already exists/.test(err.message)) {
-//     console.error('Firebase initialization error', err.stack)
-//   }
-// }
-
+import axios from 'axios';
 
 
 
 export default {
   name: 'positions',
+  data() {
+    return {
+      positions: {}
+    }
+  },
+  created() {
+    axios.get(`https://georgeplukov.firebaseio.com/positions.json`)
+      .then(response => {
+        // JSON responses are automatically parsed.
+        this.positions = response.data
+
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
+    // async / await version (created() becomes async created())
+    //
+    // try {
+    //   const response = await axios.get(`http://jsonplaceholder.typicode.com/posts`)
+    //   this.posts = response.data
+    // } catch (e) {
+    //   this.errors.push(e)
+    // }
+  }
+
+
+
+
   // firebase: {
   //   positions: positionsRef.limitToLast(20)
   // },
@@ -92,19 +112,7 @@ h1{
   font-family: 'Raleway', sans-serif;
 }
 
-.position-employer{
-  font-size: 1.25em;
-}
 
-
-.position-title{
-}
-.comp-name{
-  /*lato-bol caps*/
-}
-.descriptor{
-  /*raleway-medium*/
-}
 .location{
   /*location raleway medium */
   color: #6A6A6A;
@@ -115,10 +123,32 @@ h1{
   flex-wrap: nowrap;
   height:100%;
 }
+
+
 .position{
   width:90%;
-  margin-top: 10px;
+  margin-top: 0px;
+  margin-bottom: 20px;
   font-size:1.4em;
   color:black;
+}
+
+
+.position-employer{
+  font-size: 1em;
+  line-height: normal;
+
+}
+.position-title{
+}
+.comp-name{
+  /*lato-bol caps*/
+}
+.descriptor{
+  /*raleway-medium*/
+}
+.date{
+  font-size: .75em;
+  color: #6A6A6A;
 }
 </style>

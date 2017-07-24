@@ -31,8 +31,8 @@
             </svg>
             <!-- Gallery display box -->
             <div class="" v-show="current_active == 0" v-on:mouseleave="mouseLeave(0)">
-              <template v-for="image in gallery">
-                <img class="preview-image" v-bind:src="image.url" v-bind:alt="image.title"  ></img>
+              <template v-for="image in this.gallery">
+                <img v-if="image.feature" class="preview-image" v-bind:src="image.url" v-bind:alt="image.title"  ></img>
               </template>
             </div>
 
@@ -46,7 +46,7 @@
               <line x1="8em" y1="10px" x2="83%" y2="10px" />
             </svg>
             <div class="" v-show="current_active == 1" v-on:mouseleave="mouseLeave(1)">
-              <template v-for="pos in positions">
+              <template v-for="pos in this.positions">
                 <!-- <img class="preview-image" v-bind:src="pos.image_url" v-bind:alt="pos.title"></img> -->
 
               </template>
@@ -62,9 +62,9 @@
             <line x1="14em" y1="10px" x2="83%" y2="10px" />
           </svg>
           <div class="" v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
-            <template v-for="proj in projects">
-              <!-- <img class="preview-image" v-bind:src="proj.image_url" v-bind:alt="proj.title"></img> -->
-              <div class="proj-card">
+            <template  v-for="proj in projects">
+         <!-- <img class="preview-image" v-bind:src="proj.image_url" v-bind:alt="proj.title"></img> -->
+              <div v-if="proj.feature" class="proj-card">
                 <div class="proj-title">
                   {{proj.title}}
                 </div>
@@ -92,35 +92,37 @@
 </template>
 
 <script>
-import Firebase from 'firebase'
+import axios from 'axios';
+
+// import Firebase from 'firebase'
 // Setup Firebase
-var config = {
-  apiKey: "AIzaSyDjJouOC4yv9B0_a-JZe7SS6-UxU3wVFiI",
-  authDomain: "georgeplukov.firebaseapp.com",
-  databaseURL: "https://georgeplukov.firebaseio.com",
-  projectId: "georgeplukov",
-  storageBucket: "georgeplukov.appspot.com",
-  messagingSenderId: "639555083052"
-};
+// var config = {
+//   apiKey: "AIzaSyDjJouOC4yv9B0_a-JZe7SS6-UxU3wVFiI",
+//   authDomain: "georgeplukov.firebaseapp.com",
+//   databaseURL: "https://georgeplukov.firebaseio.com",
+//   projectId: "georgeplukov",
+//   storageBucket: "georgeplukov.appspot.com",
+//   messagingSenderId: "639555083052"
+// };
 //
 // var db = firebaseApp.database()
 
-let galleryRef
-let positionsRef
-let projectsRef
-try {
-  let app = Firebase.initializeApp(config)
-  let db = app.database()
-  galleryRef = db.ref('gallery')
-  positionsRef = db.ref('positions')
-  projectsRef = db.ref('projects')
-} catch (err) {
-  // we skip the "already exists" message which is
-  // not an actual error when we're hot-reloading
-  if (!/already exists/.test(err.message)) {
-    console.error('Firebase initialization error', err.stack)
-  }
-}
+// let galleryRef
+// let positionsRef
+// let projectsRef
+// try {
+//   let app = Firebase.initializeApp(config)
+//   let db = app.database()
+//   galleryRef = db.ref('gallery')
+//   positionsRef = db.ref('positions')
+//   projectsRef = db.ref('projects')
+// } catch (err) {
+//   // we skip the "already exists" message which is
+//   // not an actual error when we're hot-reloading
+//   if (!/already exists/.test(err.message)) {
+//     console.error('Firebase initialization error', err.stack)
+//   }
+// }
 
 export default {
   name: 'app',
@@ -128,14 +130,35 @@ export default {
     return {
       current_active: -1,
       continue: false,
-      insta_data: null
+      positions: {},
+      gallery: {},
+      projects: {}
     }
   },
-  firebase: {
-    gallery: galleryRef.limitToLast(3),
-    positions: positionsRef.limitToLast(3),
-    projects: projectsRef.limitToLast(3)
+  created() {
+    axios.get(`https://georgeplukov.firebaseio.com/positions.json`)
+      .then(response => {
+        this.positions = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
+    axios.get(`https://georgeplukov.firebaseio.com/gallery.json`)
+      .then(response => {
+        this.gallery = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
+    axios.get(`https://georgeplukov.firebaseio.com/projects.json`)
+      .then(response => {
+        this.projects = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
   },
+
   methods: {
     mouseOver: function(num) {
       this.current_active = num

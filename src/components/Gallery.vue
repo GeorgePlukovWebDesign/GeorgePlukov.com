@@ -1,12 +1,14 @@
 <template lang="html">
 <div class="gallery">
-  <InProgress></InProgress>
+  <!-- <InProgress></InProgress> -->
+  <imagelapse></imagelapse>
 
 </div>
 </template>
 
 <script>
 import InProgress from './subpage/InProgress.vue'
+
 export default {
   name: 'gallery',
   components:{

@@ -4,15 +4,13 @@
       <span class="lato-hairline">Work</span> <span class="lato-norm">Experience</span>
     </h1>
     <div class="flex-cont">
+      <!-- <div v-if="loading"> test </div> -->
       <div v-for="pos in this.positions" class="position">
         <!-- row 1 -->
         <div class="row">
 
-          <span class="position-employer lato-bold">
-            {{ pos.employer | uppercase }}
-
-          </span>
-|
+          <span class="position-employer lato-bold">{{ pos.employer | uppercase }}</span>
+          |
           <span class="position-title lato-norm">
             {{pos.title}}
           </span>
@@ -41,13 +39,12 @@
 <script>
 import axios from 'axios';
 
-
-
 export default {
   name: 'positions',
   data() {
     return {
-      positions: {}
+      positions: {},
+      loading: true
     }
   },
   created() {
@@ -55,27 +52,13 @@ export default {
       .then(response => {
         // JSON responses are automatically parsed.
         this.positions = response.data
-
+        this.loading = false
       })
       .catch(e => {
         this.errors.push(e)
       })
-    // async / await version (created() becomes async created())
-    //
-    // try {
-    //   const response = await axios.get(`http://jsonplaceholder.typicode.com/posts`)
-    //   this.posts = response.data
-    // } catch (e) {
-    //   this.errors.push(e)
-    // }
+
   }
-
-
-
-
-  // firebase: {
-  //   positions: positionsRef.limitToLast(20)
-  // },
 }
 </script>
 

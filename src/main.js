@@ -5,11 +5,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vue2Filters from 'vue2-filters'
+import VueCarousel from 'vue-carousel'
 
 var VueFire = require('vuefire')
 
 Vue.use(VueFire)
 Vue.use(Vue2Filters)
+Vue.use(VueCarousel)
 
 Vue.config.productionTip = false
 

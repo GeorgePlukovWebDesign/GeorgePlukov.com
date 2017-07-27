@@ -4,9 +4,16 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
+  mode: 'history',
 
   routes: [
+    {
+      path:'/dev',
+      name: 'dev',
+      component: function (resolve) {
+        require(['@/components/custom/Imagescroller.vue',], resolve)
+      }
+    },
     {
       path:'/positions',
       name: 'positions',

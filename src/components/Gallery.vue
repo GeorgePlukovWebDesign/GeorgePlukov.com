@@ -1,7 +1,7 @@
 <template lang="html">
 <div class="gallery">
-  <!-- <InProgress></InProgress> -->
-  <imagelapse></imagelapse>
+  <InProgress></InProgress>
+  <!-- <imagelapse></imagelapse> -->
 
 </div>
 </template>

@@ -1,11 +1,10 @@
 <template lang="html">
   <carousel class="container" :perPage="1" :autoplayHoverPause="true" :autoplay="true" :autoplayTimeout="400"
-  :speed="10" :paginationEnabled="true">
+  :speed="400" :paginationEnabled="true">
       <slide v-for="url in gallery['-KpLafFrMT8aq099iWEc']['images']">
         <img class="image" v-bind:src="url" alt="gallery['-KpLafFrMT8aq099iWEc']['title']" >
       </slide>
-
-    </carousel>
+  </carousel>
 </template>
 
 <script>
@@ -41,7 +40,7 @@ export default {
 
 <style lang="css">
 .container{
-  width:200px;
+  width:400px;
   /*background-color: red;*/
 }
 .image{
@@ -52,9 +51,9 @@ export default {
     z-index: -1;
 }
 .VueCarousel-pagination{
-  margin-top: -60px
+  margin-top: -60px;
 }
 .VueCarousel-dot--active{
-  
+
 }
 </style>

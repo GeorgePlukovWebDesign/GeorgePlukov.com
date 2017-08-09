@@ -47,8 +47,17 @@
             </svg>
             <div class="" v-show="current_active == 1" v-on:mouseleave="mouseLeave(1)">
               <template v-for="pos in this.positions">
-                <!-- <img class="preview-image" v-bind:src="pos.image_url" v-bind:alt="pos.title"></img> -->
-
+                <div v-if="pos.feature" class="proj-card">
+                  <div class="proj-title">
+                    {{pos.title}}
+                  </div>
+                  <div class="proj-employer">
+                    {{pos.employer}}
+                  </div>
+                  <div class="proj-desc">
+                    {{pos.description}}
+                  </div>
+                </div>
               </template>
             </div>
 
@@ -63,14 +72,10 @@
           </svg>
           <div class="" v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
             <template  v-for="proj in projects">
-         <!-- <img class="preview-image" v-bind:src="proj.image_url" v-bind:alt="proj.title"></img> -->
               <div v-if="proj.feature" class="proj-card">
                 <div class="proj-title">
                   {{proj.title}}
                 </div>
-                <!-- <img class="proj-img" v-bind:src="proj.image_url" v-bind:alt="proj.title"></img> -->
-                <!-- <a v-bind:href="{{proj.github_url}}"> -->
-              <!-- </a> -->
                 <div class="proj-desc">
                   {{proj.description}}
                 </div>
@@ -93,36 +98,6 @@
 
 <script>
 import axios from 'axios';
-
-// import Firebase from 'firebase'
-// Setup Firebase
-// var config = {
-//   apiKey: "AIzaSyDjJouOC4yv9B0_a-JZe7SS6-UxU3wVFiI",
-//   authDomain: "georgeplukov.firebaseapp.com",
-//   databaseURL: "https://georgeplukov.firebaseio.com",
-//   projectId: "georgeplukov",
-//   storageBucket: "georgeplukov.appspot.com",
-//   messagingSenderId: "639555083052"
-// };
-//
-// var db = firebaseApp.database()
-
-// let galleryRef
-// let positionsRef
-// let projectsRef
-// try {
-//   let app = Firebase.initializeApp(config)
-//   let db = app.database()
-//   galleryRef = db.ref('gallery')
-//   positionsRef = db.ref('positions')
-//   projectsRef = db.ref('projects')
-// } catch (err) {
-//   // we skip the "already exists" message which is
-//   // not an actual error when we're hot-reloading
-//   if (!/already exists/.test(err.message)) {
-//     console.error('Firebase initialization error', err.stack)
-//   }
-// }
 
 export default {
   name: 'app',
@@ -219,7 +194,6 @@ iew {
 }
 
 line {
-  // color:grey;
   stroke: grey;
   stroke-width: 1;
 }
@@ -245,38 +219,25 @@ line {
 }
 
 .item-box {
-  display: inline-block; // max-height: 10vh;
+  display: inline-block;
   height: auto;
-  width: 25%; // max-height: 150px;
+  width: 25%;
   margin-left: 10px;
   margin-right: 5px;
-  border: 1px solid #d1d5da;
-  border-radius: 10px;
+
 }
 .preview-image{
-  border: 1px solid #d1d5da;
   display: inline-block;
   height: auto;
   max-width: 26%;
   min-width: 26%;
 
-  border-radius: 10px;
   margin-left: 10px;
   margin-right: 5px;
   min-height: 200px;
   min-width:200px;
 }
 
-
-/*
-
-
-
-
-  icon  color: #586069;
-  titile   color: #0366d6;
-*/
-/*#REPLACE WITH FLEXBOX*/
 .proj-card{
   border: 1px solid #d1d5da;
   display: inline-block;
@@ -308,7 +269,6 @@ line {
   float:right;
   vertical-align: middle;
   display: inline-block;
-  /*font-size:*/
   color:#333;
   font-family: Arial;
 }

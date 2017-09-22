@@ -2,7 +2,6 @@
   <div class="container">
 
     <div class="header">
-      <label for='username'><img src="https://www.gstatic.com/images/icons/material/system/1x/account_box_black_24dp.png" width="24"/></label>
       <span id='username'>{{  (loggedIn) ? user.displayName : "N/A" }}</span>
       <span id='login'>
         <button id='google' v-on:click="googleLogin()" class='idp-button'>Sign in with Google</button>
@@ -11,40 +10,66 @@
     </div>
 
     <div class="body">
-      <div class="form-title">
-        
-      </div>
-      <el-form ref="form" :model="image" label-width="120px">
-          <el-form-item label="Image name">
-             <el-input v-model="image.imagename"></el-input>
-          </el-form-item>
-
-          <el-form-item label="Image description">
-             <el-input v-model="image.description"></el-input>
-          </el-form-item>
-          <el-form-item label="Image Location Name">
-             <el-input v-model="image.location.name"></el-input>
-          </el-form-item>
-          <el-form-item label="Activity time">
-            <el-col :span="11">
-              <el-date-picker type="date" placeholder="Pick a Location" v-model="image.long" style="width: 100%;"></el-date-picker>
-            </el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-time-picker type="fixed-time" placeholder="Pick a time" v-model="image.lat" style="width: 100%;"></el-time-picker>
-            </el-col>
-          </el-form-item>
-          <div>
-           <input type="file" id="file" name="file" @change="handleUpload"/>
+      <el-row>
+        <el-col :span="8" class="column left">
+          <div class="form-title">
+            <h3>File Upload</h3> 
           </div>
+          <el-form ref="form" :model="image" label-width="120px">
+            <el-form-item label="Image Title">
+               <el-input v-model="image.imagename"></el-input>
+            </el-form-item>
 
-          <el-button type="primary" v-on:click="submitPhoto()" >Send <i class="el-icon-upload el-icon-right"></i></el-button>
-      </el-form>
+            <el-form-item label="Image Desc">
+               <el-input v-model="image.description"></el-input>
+            </el-form-item>
+            <el-form-item label="Image Location">
+               <el-input v-model="image.location.name"></el-input>
+            </el-form-item>
+            <el-form-item label="Activity time">
+              <el-col :span="11">
+                <el-date-picker type="date" placeholder="Pick a Location" v-model="image.long" style="width: 100%;"></el-date-picker>
+              </el-col>
+              <el-col class="line" :span="2">-</el-col>
+              <el-col :span="11">
+                <el-time-picker type="fixed-time" placeholder="Pick a time" v-model="image.lat" style="width: 100%;"></el-time-picker>
+              </el-col>
+            </el-form-item>
+            <div class="file-upload">
 
-      <div class="photoview" >
+              <span>
+                <h4> Thumbnail</h4>
+                <input type="file" id="thumbnail" name="thumbnail" @change="handleUploadThumbnail($event)"/>
+              </span>
+
+              <span>
+                <h4> Fullsize</h4>
+                <input type="file" id="fullsize" name="fullsize" @change="handleUploadFullsize($event)"/>
+              </span>
+
+            </div>
+
+            <el-button type="primary" v-on:click="submitPhoto()" >Send <i class="el-icon-upload el-icon-right"></i></el-button>
+          </el-form>
+        </el-col>
+        <el-col :span="16" class="column right">
+          <div class="preview">
+            <img class="img" v-bind:src="image.urls.thumbnail">
+          </div>
+        </el-col>
+      </el-row>
+     <!--   <div class="preview-container">
+         <h3>File Preview</h3>
+
+       <div class="photoview" >
           <img v-model="urlList" v-for="url in urlList" class="img-preview" v-bind:src="url" alt="">
-      </div>
+        </div> 
+      </div>-->
+      
     </div>
+
+      
+
 
     <div class="footer">
       
@@ -79,10 +104,18 @@
           user: {},
           loggedIn: false,
           image: {
-            location: {},
+            name:'',
+            location: {
+              "long": '',
+              "lat": ''
+            },
+            urls:{
+              "thumbnail": '',
+              "fullsize": ''
+            }
           },
           file: "",
-          urlList: ["https://i.imgur.com/htA8w4F.jpg", "",""]
+          urlList: []
           // shallWeUseVuex: require('../../variable.js')
       }
     },
@@ -125,24 +158,26 @@
       },
       handleRemove:  function (){},
       submitPhoto: function (){},
-      handleUpload: function(e){
+      handleUploadThumbnail: function(e){
         var file = e.target.files[0];
-
-        var storageRef = storage.ref().child('chat_photos');
-        // Get a reference to store file at photos/<FILENAME>.jpg
+        var storageRef = storage.ref().child('images/fullsize');
         var photoRef = storageRef.child(file.name);
-
-
         var self = this
-        // Upload file to Firebase Storage
         var uploadTask = photoRef.put(file);
         uploadTask.on('state_changed', null, null, function() {
-          // When the image has successfully uploaded, we get its download URL
           var downloadUrl = uploadTask.snapshot.downloadURL;
-          // console.log(downloadUrl)/
-          // Set the download URL to the message box, so that the user can send it to the database
-          // this.downloadUrl = downloadUrl;
-          (self.urlList).push(downloadUrl)
+          self.image.urls.thumbnail = downloadUrl
+        });
+      },
+       handleUploadFullsize: function(e){
+        var file = e.target.files[0];
+        var storageRef = storage.ref().child('images/thumbnail');
+        var photoRef = storageRef.child(file.name);
+        var self = this
+        var uploadTask = photoRef.put(file);
+        uploadTask.on('state_changed', null, null, function() {
+          var downloadUrl = uploadTask.snapshot.downloadURL;
+          self.image.urls.thumbnail = downloadUrl
         });
       }
     },
@@ -172,21 +207,36 @@
 
 /**** BODY ****/
 .body{
-  width: 50%;
-  margin: 0 auto;
+  /*width: 50%;*/
   
+}
+.column{
+  padding-left: 20px;
+  padding-top:20px;
+  padding-bottom:20px;
+}
+.left{
+
+}
+.right{
+
 }
 .form-title{}
 .form{}
 .line{}
+.file-upload{
+  margin-bottom: 10px;
+
+}
 .photoview{
   margin-top: 10px;
   border-radius: 10px;
   border: 1px dashed grey;
 }
-.img-preview{
-  height: 150px;
-  margin: 10px 10px;
+.img{
+  height: 60vh;
+  padding-top: 10vh; 
+  padding-left: 20px;
 }
 /**** FOOTER ****/
 .footer{}

@@ -6,9 +6,9 @@
       </div>
       <div class="menu raleway">
         <router-link class="" @mouseover.native="mouseOver(0)" v-on:mouseleave="mouseLeave(0)" to="/gallery">Gallery</router-link>
-        <router-link class="" @mouseover.native="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" to="/positions">Positions</router-link>
+        <!-- <router-link class="" @mouseover.native="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" to="/positions">Positions</router-link>
         <router-link class="" @mouseover.native="mouseOver(2)" v-on:mouseleave="mouseLeave(2)" to="/projects">Projects</router-link>
-
+ -->
 
       </div>
       <transition name="slide-fade">
@@ -36,7 +36,7 @@
             <!--  -->
             <!-- Positions PREVIEW -->
             <!--  -->
-            <svg v-show="current_active == 1" id="line-blog" class="line" height="10" width="100%">
+           <!--  <svg v-show="current_active == 1" id="line-blog" class="line" height="10" width="100%">
               <line x1="0px" y1="10px" x2="7em" y2="10px"  />
               <line class="lighter" x1="7em" y1="10px" x2="7.5em" y2="0px" />
               <line class="lighter" x1="7.5em" y1="0px" x2="8em" y2="10px" />
@@ -47,12 +47,12 @@
                 <DisplayIcon  v-for="pos in positions" :key="pos.id" v-if="pos['feature']" class="display-icon" :imageurl="pos['image_url']" :text="pos['title']" >
                 </DisplayIcon>
               </div>
-            </div>
+            </div> -->
 
           <!--  -->
           <!-- Projects PREVIEW -->
           <!--  -->
-          <svg v-show="current_active == 2" id="line-blog" class="line" height="10" width="100%">
+         <!--  <svg v-show="current_active == 2" id="line-blog" class="line" height="10" width="100%">
             <line x1="0px" y1="10px" x2="13em" y2="10px"  />
             <line class="lighter" x1="13em" y1="10px" x2="13.5em" y2="0px" />
             <line class="lighter" x1="13.5em" y1="0px" x2="14em" y2="10px" />
@@ -63,7 +63,7 @@
               <DisplayIcon  v-for="proj in projects" :key="proj.id" v-if="proj['feature']" class="display-icon" :imageurl="proj['image_url']" :text="proj['title']" >
               </DisplayIcon>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       </transition>

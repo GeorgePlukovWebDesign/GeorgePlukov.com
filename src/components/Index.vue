@@ -9,10 +9,6 @@
         <router-link class="" @mouseover.native="mouseOver(1)" v-on:mouseleave="mouseLeave(1)" to="/positions">Positions</router-link>
         <router-link class="" @mouseover.native="mouseOver(2)" v-on:mouseleave="mouseLeave(2)" to="/projects">Projects</router-link>
 
-        <!-- <a v-on:mouseover="mouseOver(2)" v-on:mouseleave="mouseLeaveButton(2)" href="#">
-                  Projects
-                </a> -->
-
 
       </div>
       <transition name="slide-fade">
@@ -31,9 +27,10 @@
             </svg>
             <!-- Gallery display box -->
             <div class="" v-show="current_active == 0" v-on:mouseleave="mouseLeave(0)">
-              <template v-for="image in this.gallery">
-                <img v-if="image.feature" class="preview-image" v-bind:src="image.url" v-bind:alt="image.title"  ></img>
-              </template>
+              <div class="icon-container" >
+                <DisplayIcon  v-for="image in photos" :key="photos.id" v-if="image['feature']" class="display-icon" :imageurl="image['image_url']" :text="image['title']" >
+                </DisplayIcon>
+              </div>
             </div>
 
             <!--  -->
@@ -46,19 +43,10 @@
               <line x1="8em" y1="10px" x2="83%" y2="10px" />
             </svg>
             <div class="" v-show="current_active == 1" v-on:mouseleave="mouseLeave(1)">
-              <template v-for="pos in this.positions">
-                <div v-if="pos.feature" class="proj-card">
-                  <div class="proj-title">
-                    {{pos.title}}
-                  </div>
-                  <div class="proj-employer">
-                    {{pos.employer}}
-                  </div>
-                  <div class="proj-desc">
-                    {{pos.description}}
-                  </div>
-                </div>
-              </template>
+              <div class="icon-container" >
+                <DisplayIcon  v-for="pos in positions" :key="pos.id" v-if="pos['feature']" class="display-icon" :imageurl="pos['image_url']" :text="pos['title']" >
+                </DisplayIcon>
+              </div>
             </div>
 
           <!--  -->
@@ -70,23 +58,11 @@
             <line class="lighter" x1="13.5em" y1="0px" x2="14em" y2="10px" />
             <line x1="14em" y1="10px" x2="83%" y2="10px" />
           </svg>
-          <div class="" v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
-            <template  v-for="proj in projects">
-              <div v-if="proj.feature" class="proj-card">
-                <div class="proj-title">
-                  {{proj.title}}
-                </div>
-                <div class="proj-desc">
-                  {{proj.description}}
-                </div>
-                <a v-bind:href="proj.github_url">
-                  <img src="../assets/Github-Mark-120px.png" alt="github icon" class="github-icon"></img>
-                </a>
-                <div class="languages">
-                  {{proj.languages}}
-                </div>
-              </div>
-            </template>
+          <div  v-show="current_active == 2" v-on:mouseleave="mouseLeave(2)">
+            <div class="icon-container" >
+              <DisplayIcon  v-for="proj in projects" :key="proj.id" v-if="proj['feature']" class="display-icon" :imageurl="proj['image_url']" :text="proj['title']" >
+              </DisplayIcon>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +74,7 @@
 
 <script>
 import axios from 'axios';
-
+import DisplayIcon from './custom/DisplayIcon.vue'
 export default {
   name: 'app',
   data() {
@@ -106,7 +82,7 @@ export default {
       current_active: -1,
       continue: false,
       positions: {},
-      gallery: {},
+      photos: {},
       projects: {}
     }
   },
@@ -120,7 +96,7 @@ export default {
       })
     axios.get(`https://georgeplukov.firebaseio.com/gallery.json`)
       .then(response => {
-        this.gallery = response.data
+        this.photos = response.data
       })
       .catch(e => {
         this.errors.push(e)
@@ -128,6 +104,8 @@ export default {
     axios.get(`https://georgeplukov.firebaseio.com/projects.json`)
       .then(response => {
         this.projects = response.data
+        console.log(this.projects);
+
       })
       .catch(e => {
         this.errors.push(e)
@@ -146,11 +124,14 @@ export default {
     mouseLeave: function(num) {
       this.current_active = -1
     }
+  },
+  components: {
+    DisplayIcon
   }
 }
 </script>
 
-<style>
+<style scoped >
 .block {
   margin-top: 28vh;
   margin-left: 17%;
@@ -298,6 +279,16 @@ line {
 .font-bold {
   font-weight: 600;
 }
+.icon-container{
+  display: inline-block;
+  width:100%;
+}
+.display-icon{
+  width: 28%;
+  height: auto;
+  display: inline-block;
+  margin-left: 3px;
+  margin-right: 3px;
+}
 
-.gallery {}
 </style>

@@ -1,8 +1,13 @@
 <template lang="html">
 <div class="gallery">
-  <InProgress></InProgress>
-  <!-- <imagelapse></imagelapse> -->
-
+  <div class="title">
+    
+  </div>
+  <div class="flex">
+    <div v-for="" class="">
+      
+    </div>
+  </div>
 </div>
 </template>
 
@@ -17,5 +22,12 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+.title{
+
+}
+
+.flex{
+
+}
 </style>

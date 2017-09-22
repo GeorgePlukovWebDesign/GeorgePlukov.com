@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import Hello from '@/components/Hello'
 
 Vue.use(Router)
+
+// const router = new VueRouter({history: true, root: config.root});
 
 export default new Router({
   mode: 'history',
@@ -11,7 +14,7 @@ export default new Router({
       path:'/dev',
       name: 'dev',
       component: function (resolve) {
-        require(['@/components/custom/Imagescroller.vue',], resolve)
+        require(['@/components/custom/Css.vue',], resolve)
       }
     },
     {
@@ -27,6 +30,18 @@ export default new Router({
       component: function (resolve) {
         require(['@/components/Gallery.vue'], resolve)
         // require(['@components/subpage/InProgress.vue'], resolve)
+
+
+
+      }
+    },
+    {
+      path:'/upload',
+      name: 'upload',
+      component: function (resolve) {
+        require(['@/components/Upload.vue'], resolve)
+        // require(['@components/subpage/InProgress.vue'], resolve)
+
 
 
       }

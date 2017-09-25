@@ -17,22 +17,21 @@
           </div>
           <el-form ref="form" :model="image" label-width="120px">
             <el-form-item label="Image Title">
-               <el-input v-model="image.imagename"></el-input>
+               <el-input v-model="image.name"></el-input>
             </el-form-item>
 
             <el-form-item label="Image Desc">
-               <el-input v-model="image.description"></el-input>
+               <el-input type="textarea" v-model="image.description"></el-input>
             </el-form-item>
             <el-form-item label="Image Location">
                <el-input v-model="image.location.name"></el-input>
             </el-form-item>
             <el-form-item label="Activity time">
-              <el-col :span="11">
-                <el-date-picker type="date" placeholder="Pick a Location" v-model="image.long" style="width: 100%;"></el-date-picker>
+              <el-col :span="12">
+                <el-input class="" type="text" placeholder="Longitude" v-model="image.location.long" style="width: 90%;padding-right:10%;"></el-input>
               </el-col>
-              <el-col class="line" :span="2">-</el-col>
-              <el-col :span="11">
-                <el-time-picker type="fixed-time" placeholder="Pick a time" v-model="image.lat" style="width: 100%;"></el-time-picker>
+              <el-col :span="12">
+                <el-input class="" type="text" placeholder="Latitude" v-model="image.location.lat" style="width: 90%;padding-left:10%;"></el-input>
               </el-col>
             </el-form-item>
             <div class="file-upload">
@@ -53,9 +52,12 @@
           </el-form>
         </el-col>
         <el-col :span="16" class="column right">
-          <div class="preview">
-            <img class="img" v-bind:src="image.urls.thumbnail">
+          <div class="preview" @mouseenter="visible = true" @mouseleave="visible = false">
+            <!-- <img class="img" v-bind:src="image.urls.thumbnail"> -->
+            <img class="img" v-bind:src="image.urls.fullsize">
+            <!-- <div v-if="visible" transition="fade" class="title raleway">{{ image.name }}</div> -->
           </div>
+
         </el-col>
       </el-row>
      <!--   <div class="preview-container">
@@ -95,7 +97,7 @@
       auth = app.auth(),
       storage = app.storage();
 
-  let chatReference= database.ref().child('chat');
+  let databaseRef= database.ref().child('gallery');
 
   export default {
     name: 'upload',
@@ -105,9 +107,11 @@
           loggedIn: false,
           image: {
             name:'',
+            description: '',
             location: {
-              "long": '',
-              "lat": ''
+              name: '',
+              long: '',
+              lat: ''
             },
             urls:{
               "thumbnail": '',
@@ -115,12 +119,13 @@
             }
           },
           file: "",
-          urlList: []
+          urlList: [],
+          visible: false
           // shallWeUseVuex: require('../../variable.js')
       }
     },
     firebase: {
-      chat: chatReference,
+      dbref: databaseRef,
     },
     created() {
       this.user = app.auth().currentUser; 
@@ -153,11 +158,24 @@
       setUsername: function (newName){
         this.username = newName; 
       },
-      handlePreview: function (){ 
-        alert('asd')
+      submitPhoto: function (){
+        // var image = { name: username, message: textInput.value };
+        databaseRef.push().set(this.image);
+        this.image = {
+            name:'',
+            description: '',
+            location: {
+              name: '',
+              long: '',
+              lat: ''
+            },
+            urls:{
+              thumbnail: '',
+              fullsize: ''
+            }
+          };
+
       },
-      handleRemove:  function (){},
-      submitPhoto: function (){},
       handleUploadThumbnail: function(e){
         var file = e.target.files[0];
         var storageRef = storage.ref().child('images/fullsize');
@@ -177,7 +195,8 @@
         var uploadTask = photoRef.put(file);
         uploadTask.on('state_changed', null, null, function() {
           var downloadUrl = uploadTask.snapshot.downloadURL;
-          self.image.urls.thumbnail = downloadUrl
+          self.image.urls.fullsize = downloadUrl
+          console.log(downloadUrl)
         });
       }
     },
@@ -223,20 +242,48 @@
 }
 .form-title{}
 .form{}
-.line{}
+
 .file-upload{
   margin-bottom: 10px;
 
 }
+.preview{
+  width:auto;
+}
 .photoview{
   margin-top: 10px;
   border-radius: 10px;
-  border: 1px dashed grey;
 }
 .img{
   height: 60vh;
+  max-height: 400px;
   padding-top: 10vh; 
   padding-left: 20px;
+}
+
+.title{
+  padding-left: 20px;
+  padding-top: 10px;
+  font-size: 1.5em;
+  color: grey;
+}
+
+.fade-transition{
+  transition:all  1s ease;
+ 
+}
+.fade-enter, .fade-leave {
+  height:0px;
+}
+
+/** FONTS **/
+.raleway {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+.lato-norm {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
 }
 /**** FOOTER ****/
 .footer{}
